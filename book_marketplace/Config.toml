@@ -1,0 +1,9 @@
+[book_marketplace]
+refreshToken = "1//049J94dPIwPRmCgYIARAAGAQSNwF-L9Irav1spUReOS675r5A5GyAb8-sMSeBZJcWyyZgokDMXkTRGUg_KVoVjLr0LMCxf0r6Zls"
+clientId = "35340435173-6fokqde35qd10nt42a379v2ggc53v6eh.apps.googleusercontent.com"
+clientSecret = "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"
+
+[book_marketplace.data]
+url = "jdbc:h2:file:./database/book_marketplace"
+user = "test"
+password = "test"
