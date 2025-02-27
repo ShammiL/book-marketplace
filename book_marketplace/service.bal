@@ -40,6 +40,11 @@ service /api on bookstoreListner { // TODO: change the service name
         return from data:Book book in bookStream select book;
     }
 
+    @http:ResourceConfig {
+        auth: {
+            scopes: ["author"]
+        }
+    }
     resource function post books/upload(UploadedBook uploadedBook) returns http:Created|error {
         // TODO: get user Id && validate if type is author
         string authorId = "";
@@ -52,6 +57,11 @@ service /api on bookstoreListner { // TODO: change the service name
         return http:CREATED;
     }
 
+    @http:ResourceConfig {
+        auth: {
+            scopes: ["author"]
+        }
+    }
     resource function delete books/[string bookId]() returns http:NoContent|Forbidden|error {
         // TODO: get user Id && validate if type is author
         string authorId = "";
@@ -63,6 +73,11 @@ service /api on bookstoreListner { // TODO: change the service name
         return http:NO_CONTENT;
     }
 
+    @http:ResourceConfig {
+        auth: {
+            scopes: ["buyer"]
+        }
+    }
     resource function post books/[string bookId]/purchase(DeliveryAddress address) returns http:Created|error {
         // TODO: get user id and validate if the type is buyer
         string buyerId = "";
