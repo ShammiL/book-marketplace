@@ -9,14 +9,32 @@ configurable string refreshToken = ?;
 configurable string clientId = ?;
 configurable string clientSecret = ?;
 
-listener http:Listener bookstoreListner = new (9090);
 final data:Client dbClient = check new ();
 
-service /api on bookstoreListner { // TODO: change the service name
-    resource function post auth/login() {
-        // TODO: Implement login
-    }
+listener http:Listener bookstoreListner = new (9090);
 
+@http:ServiceConfig {
+    auth: [
+        {
+            oauth2IntrospectionConfig: {
+                url: "http://localhost:9444/oauth2/introspect",
+                tokenTypeHint: "access_token",
+                scopeKey: "scp",
+                clientConfig: {
+                    customHeaders: {"Authorization": "Basic YXV0aG9yOmF1dGhvcg=="}
+                    
+                }
+            }
+        }
+    ]
+}
+
+service /api on bookstoreListner { // TODO: change the service name
+     @http:ResourceConfig {
+        auth: {
+            scopes: ["author"]
+        }
+    }
     resource function get books() returns data:Book[]|error {
         stream<data:Book, persist:Error?> bookStream = dbClient->/books;
         return from data:Book book in bookStream select book;
@@ -103,7 +121,6 @@ public function sendAuthorMail(string bookTitle, string isbn, string authorEmail
     });
 
     // Compose the email message.
-
     string htmlContent = string `<html>
     <head>
         <title>Book Purchase Notification</title>
